@@ -55,18 +55,21 @@ class Board extends React.Component {
     }
 
     render() {
-        let boardRow = [];
-        for(let i=0; i<3; i++) {
-            let row = [];
-            for (let j=0; j<3; j++) {
-              row.push(this.renderSquare(i*3+j));
-            };
-            boardRow.push(<div key={i} className="board-row">{row}</div>);
+        const renderBoard = () => {
+            let boardRow = [];
+            for(let i=0; i<3; i++) {
+                let row = [];
+                for (let j=0; j<3; j++) {
+                  row.push(this.renderSquare(i*3+j));
+                };
+                boardRow.push(<div key={i} className="board-row">{row}</div>);
+            }
+            return boardRow;
         }
 
         return (
             <div>
-                {boardRow}
+                {renderBoard()}
             </div>
         );
     }
@@ -119,13 +122,18 @@ class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares.value);
 
+        const setStyle = (move) => {
+            return this.state.stepNumber === move ? {'font-weight': 'bolder'} : null;
+        };
+
         const moves = history.map((step, move) => {
             let coor = step.squares.coordinates;
             const desc = move ?
-                'Go to move #' + move + ' of ' + step.squares.value[coor.index] + ' at ' + coor.x + ',' + coor.y : 'Go to game start';
+                'Go to move #' + move + ' of ' + step.squares.value[coor.index] + ' at ' + coor.x + ',' + coor.y :
+                'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button onClick={() => this.jumpTo(move)} style={setStyle(move)}>{desc}</button>
                 </li>
             );
         });

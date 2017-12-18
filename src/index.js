@@ -97,8 +97,7 @@ class Game extends React.Component {
             return;
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
-        let index = {index:i};
-        let newCoordinate = {...COORDINATES[i], ...index};
+        let newCoordinate = {...COORDINATES[i], ...{index:i}};
 
         this.setState({
             history: history.concat([{
@@ -120,11 +119,7 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares.value);
-
-        const setStyle = (move) => {
-            return this.state.stepNumber === move ? {fontWeight: 'bolder'} : null;
-        };
-
+        const setStyle = (move) => { return this.state.stepNumber === move ? {fontWeight: 'bolder'} : null; };
         const moves = history.map((step, move) => {
             let coor = step.squares.coordinates;
             const desc = move ?
@@ -137,12 +132,7 @@ class Game extends React.Component {
             );
         });
 
-        let status;
-        if (winner) {
-            status = 'Winner is ' + winner;
-        } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-        }
+        let status = winner ? 'Winner is ' + winner : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
         return (
             <div className="game">

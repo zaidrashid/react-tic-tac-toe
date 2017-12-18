@@ -2,19 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const coordinates = [
-    {x:0, y:0},
-    {x:1, y:0},
-    {x:2, y:0},
-    {x:0, y:1},
-    {x:1, y:1},
-    {x:2, y:1},
-    {x:0, y:2},
-    {x:1, y:2},
-    {x:2, y:2},
-];
-
-const lines = [
+const COORDINATES = createCoordinates();
+const LINES = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -25,6 +14,16 @@ const lines = [
     [2, 4, 6],
 ];
 
+function createCoordinates() {
+    let coordinates = [];
+    for(let i=0; i<3; i++){
+        for(let j=0; j<3; j++){
+            coordinates.push({x:j, y:i});
+        }
+    }
+    return coordinates;
+}
+
 function Square(props) {
     return (
         <button className="square" onClick={props.onClick}>
@@ -34,8 +33,8 @@ function Square(props) {
 }
 
 function calculateWinner(squares) {
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
+    for (let i = 0; i < LINES.length; i++) {
+        const [a, b, c] = LINES[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return squares[a];
         }
@@ -99,7 +98,7 @@ class Game extends React.Component {
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         let index = {index:i};
-        let newCoordinate = {...coordinates[i], ...index};
+        let newCoordinate = {...COORDINATES[i], ...index};
 
         this.setState({
             history: history.concat([{
@@ -123,7 +122,7 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares.value);
 
         const setStyle = (move) => {
-            return this.state.stepNumber === move ? {'font-weight': 'bolder'} : null;
+            return this.state.stepNumber === move ? {fontWeight: 'bolder'} : null;
         };
 
         const moves = history.map((step, move) => {

@@ -47,6 +47,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                key= {i}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
             />
@@ -54,23 +55,18 @@ class Board extends React.Component {
     }
 
     render() {
+        let boardRow = [];
+        for(let i=0; i<3; i++) {
+            let row = [];
+            for (let j=0; j<3; j++) {
+              row.push(this.renderSquare(i*3+j));
+            };
+            boardRow.push(<div key={i} className="board-row">{row}</div>);
+        }
+
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {boardRow}
             </div>
         );
     }
@@ -125,7 +121,6 @@ class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             let coor = step.squares.coordinates;
-            console.log(coor);
             const desc = move ?
                 'Go to move #' + move + ' of ' + step.squares.value[coor.index] + ' at ' + coor.x + ',' + coor.y : 'Go to game start';
             return (
